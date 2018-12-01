@@ -17,7 +17,6 @@ Run the following commands from terminal to build the project from source:
 ``` bash
 $ cd /home/workspace/catkin_ws
 $ git clone http://github.com/shotaro12oyama/home-service-robot.git src
-$ git submodule update --init
 $ cd ../
 $ catkin_make
 $ cd ./src/Shellscript/home_service.sh
