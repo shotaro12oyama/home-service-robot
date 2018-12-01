@@ -19,6 +19,7 @@ $ cd /home/workspace/catkin_ws
 $ git clone http://github.com/shotaro12oyama/home-service-robot.git src
 $ cd ../
 $ catkin_make
+$ source devel/setup.sh
 $ cd ./src/Shellscript/home_service.sh
 ```
 
