@@ -9,7 +9,7 @@ private:
     ros::Subscriber odom_sub;
     visualization_msgs::Marker marker;
     double pickupZone[2] = {3.5, 5.0};
-    double dropoffZone[2] = {-0.5, 1.0};
+    double dropoffZone[2] = {-0.5, 0.5};
     double threshold;
 		const int threshold_multiplier = 3;
 
