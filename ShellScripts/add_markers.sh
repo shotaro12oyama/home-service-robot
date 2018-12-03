@@ -6,5 +6,5 @@ xterm -e " roslaunch turtlebot_gazebo amcl_demo.launch map_file:=$(rospack find 
 sleep 5
 xterm -e " roslaunch $(rospack find add_markers)/../rviz/add_marker.launch" &
 sleep 5
-xterm -e " rosrun add_markers add_markers_const_node"
+xterm -e " rosrun add_markers add_markers_simple_node"
 

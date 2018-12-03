@@ -1,22 +1,17 @@
 #include <ros/ros.h>
-#include <nav_msgs/Odometry.h>
 #include <visualization_msgs/Marker.h>
 
-class AddMarker {
+class AddSimpleMarker {
 private:
     ros::NodeHandle n;
     ros::Publisher marker_pub;
-    ros::Subscriber odom_sub;
     visualization_msgs::Marker marker;
     double pickupZone[2] = {3.5, 5.0};
     double dropoffZone[2] = {-0.5, 0.5};
-    double threshold;
-	const int threshold_multiplier = 3;
 
 public:
-    AddMarker() {
+    AddSimpleMarker() {
         marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
-        odom_sub = n.subscribe("/odom", 1, &AddMarker::odomCallback, this);
 
         // initialize marker and show marker at pickup zone
         // Set the frame ID and timestamp.  See the TF tutorials for information on these.
@@ -50,34 +45,14 @@ public:
 
         marker.lifetime = ros::Duration();
 
-        threshold = marker.scale.x;
+				publishMarker();
+        ROS_INFO("At pickup location...");
 
-		publishMarker();
-
-    }
-
-    void odomCallback(const nav_msgs::Odometry::ConstPtr &msg) {
-
-        float pos_x = msg->pose.pose.position.x;
-        float pos_y = msg->pose.pose.position.y;
-
-        // give position tolerance of + or - the marker's radius
-        bool atPickupZone = (pickupZone[0] - threshold < pos_x && pos_x < pickupZone[0] + threshold)
-                && (pickupZone[1] - threshold < pos_y && pos_y < pickupZone[1] + threshold);
-        bool atDropoffZone = (dropoffZone[0] - threshold * threshold_multiplier <= pos_x && pos_x <= dropoffZone[0] + threshold * threshold_multiplier)
-                && (dropoffZone[1] + threshold < pos_y);
-
-        if (atPickupZone) {
-            // pause 5s to simulate pickup
-            ros::Duration(5).sleep();
-            // hide marker and set it to new coordinates
-            setMarkerPosition(dropoffZone[0], dropoffZone[1]);
-            marker.color.a = 0.0;
-						ROS_INFO("At pickup location...");
-        } else if (atDropoffZone) {
-            marker.color.a = 1.0;
-						ROS_INFO("At dropoff location...");
-        }
+        // pause 5s to simulate pickup
+        ros::Duration(5).sleep();
+        // set marker to new coordinates
+        setMarkerPosition(dropoffZone[0], dropoffZone[1]);
+        ROS_INFO("At dropoff location...");
 
 				// publish marker
         publishMarker();
@@ -105,7 +80,7 @@ public:
 int main(int argc, char **argv) {
     ros::init(argc, argv, "add_markers");
 
-    AddMarker addMarker;
+    AddSimpleMarker addSimpleMarker;
     ros::spin();
 
     return 0;
